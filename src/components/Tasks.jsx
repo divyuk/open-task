@@ -23,9 +23,8 @@ function Tasks() {
     fetchData();
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async () => {
     try {
-      e.preventDefault();
       const response = await axios.post(
         "http://localhost:3000/tasks",
         taskDetails
@@ -34,6 +33,13 @@ function Tasks() {
       setTasks([...tasks, response.data]);
     } catch (err) {
       console.log("Something went wrong...", err);
+    } finally {
+      setTaskDetails({
+        title: "",
+        desciption: "",
+        flag: "No",
+        priority: "low",
+      });
     }
   };
 
@@ -74,7 +80,12 @@ function Tasks() {
             value={taskDetails.desciption}
           />
           <label htmlFor="priority">Priority : </label>
-          <select value={taskDetails.priority} onChange={handleInputChange}>
+          <select
+            value={taskDetails.priority}
+            onChange={handleInputChange}
+            name="priority"
+            id="priority"
+          >
             <option value="low">Low</option>
             <option value="medium">Medium</option>
             <option value="high">High</option>
