@@ -13,6 +13,12 @@ function Tasks() {
     priority: "low",
   });
 
+  const [showDescription, setShowDescription] = useState(false);
+  const [selectedId, setSelectedId] = useState(0);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedDescription, setEditedDescription] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,6 +55,15 @@ function Tasks() {
     // this will be like {name : title} then [name] will give title
     setTaskDetails({ ...taskDetails, [name]: value });
   }
+  function openDescription(clickedId) {
+    setSelectedId(clickedId);
+    setShowDescription(!showDescription);
+  }
+  const taskDesc = tasks.find((task) => task.id === selectedId)?.description;
+  function handleEdit() {
+    setIsEditing(!isEditing);
+    setEditedDescription(taskDesc);
+  }
 
   return (
     <>
@@ -56,7 +71,11 @@ function Tasks() {
       <h1 className="heading">Tasks</h1>
       <div className="taskContainer">
         {tasks.map((task) => (
-          <li className="taskItem" key={task.id}>
+          <li
+            className="taskItem"
+            key={task.id}
+            onClick={() => openDescription(task.id)}
+          >
             {task.title}
           </li>
         ))}
@@ -95,9 +114,29 @@ function Tasks() {
             <option value="medium">Medium</option>
             <option value="high">High</option>
           </select>
-
           <button type="submit">Add It! </button>
         </form>
+      )}
+
+      {showDescription && (
+        <div className="description">
+          {isEditing ? (
+            <textarea
+              rows="10"
+              cols="35"
+              type="text"
+              className="desc-edit"
+              value={editedDescription}
+              onChange={(e) => setEditedDescription(e.target.value)}
+              placeholder={taskDesc}
+            />
+          ) : (
+            <p>{taskDesc}</p>
+          )}
+          <span className="material-symbols-outlined" onClick={handleEdit}>
+            {isEditing ? "save" : "edit_note"}
+          </span>
+        </div>
       )}
     </>
   );
