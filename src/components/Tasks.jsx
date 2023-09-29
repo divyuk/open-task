@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import "./Tasks.css";
+import { ToastContainer, toast } from "react-toastify";
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
   const [showInput, setShowInput] = useState(false);
   const [taskDetails, setTaskDetails] = useState({
     title: "",
-    desciption: "",
+    description: "",
     flag: "No",
     priority: "low",
   });
@@ -23,23 +25,22 @@ function Tasks() {
     fetchData();
   }, []);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:3000/tasks",
-        taskDetails
-      );
-      console.log(response.data);
-      setTasks([...tasks, response.data]);
+      await axios.post("http://localhost:3000/tasks", taskDetails);
+      setTasks([...tasks, taskDetails]);
     } catch (err) {
+      toast.error("Title & description are required field");
       console.log("Something went wrong...", err);
     } finally {
       setTaskDetails({
         title: "",
-        desciption: "",
+        description: "",
         flag: "No",
         priority: "low",
       });
+      setShowInput(!showInput);
     }
   };
 
@@ -51,17 +52,21 @@ function Tasks() {
 
   return (
     <>
-      <h1>Tasks</h1>
-      <div>
+      <ToastContainer position="top-center" />
+      <h1 className="heading">Tasks</h1>
+      <div className="taskContainer">
         {tasks.map((task) => (
-          <p key={task.id}>{task.title}</p>
+          <li className="taskItem" key={task.id}>
+            {task.title}
+          </li>
         ))}
+        <button className="button" onClick={() => setShowInput(!showInput)}>
+          +
+        </button>
       </div>
-
-      <button onClick={() => setShowInput(!showInput)}>+</button>
       {/* Input for Task */}
       {showInput && (
-        <form onSubmit={handleSubmit}>
+        <form className="form-container" onSubmit={handleSubmit}>
           <label htmlFor="title">Title : </label>
           <input
             type="text"
@@ -71,13 +76,13 @@ function Tasks() {
             value={taskDetails.title}
           />
 
-          <label htmlFor="desciption">Desciption : </label>
+          <label htmlFor="description">Description : </label>
           <input
             type="text"
-            id="desciption"
-            name="desciption"
+            id="description"
+            name="description"
             onChange={handleInputChange}
-            value={taskDetails.desciption}
+            value={taskDetails.description}
           />
           <label htmlFor="priority">Priority : </label>
           <select

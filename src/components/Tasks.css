@@ -1,0 +1,109 @@
+.heading {
+  color: #5ea9be;
+  font-family: "Bangers", cursive;
+  font-family: "Pathway Extreme", sans-serif;
+  text-align: center;
+  font-size: 100px;
+  margin-bottom: 0px;
+}
+.taskContainer {
+  display: flex;
+  flex-direction: column;
+  /* width: 1000px; */
+  justify-content: center;
+  align-items: center;
+}
+.taskItem {
+  padding: 20px;
+  margin: 30px;
+  border: 2px solid black;
+  background-color: #ffddd3;
+  font-family: "Delius", cursive;
+  font-size: 25px;
+  width: 300px;
+  border-radius: 10px;
+  list-style: none;
+}
+
+/* Base styles for the button with a similar color */
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #9acde0;
+  color: #000000; /* Text color */
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Hover effect - lighten the button on hover */
+.button:hover {
+  background: linear-gradient(
+    to bottom,
+    #488fb9,
+    #5eaccb
+  ); /* Lighter gradient with similar color */
+  transform: scale(1.05); /* Slight scale-up on hover */
+}
+
+/* You can customize other button states (active, focus) as needed */
+.button:active {
+  transform: scale(0.95); /* Slight scale-down on click */
+  box-shadow: none; /* Remove shadow on click */
+}
+
+.form-container {
+  position: fixed; /* Change to fixed positioning */
+  top: 50%; /* Position from the top, at 50% of viewport height */
+  left: 5%; /* Position from the left edge */
+  transform: translateY(
+    -50%
+  ); /* Move the container up by 50% of its own height */
+  width: 300px;
+  margin: 0;
+  padding: 20px;
+  background-color: #cbe1ef; /* Calm background color */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333; /* Dark text color */
+}
+/* Styles for form inputs */
+input[type="text"],
+select {
+  width: 70%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #fff; /* White background */
+  transition: border-color 0.3s;
+}
+
+/* Style the form submit button */
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #3498db; /* Calm blue color */
+  color: #fff; /* White text color */
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #2980b9; /* Slightly darker blue on hover */
+}
