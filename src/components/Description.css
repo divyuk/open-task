@@ -1,0 +1,26 @@
+.description {
+  position: fixed; /* Change to fixed positioning */
+  top: 50%; /* Position from the top, at 50% of viewport height */
+  right: 5%; /* Position from the left edge */
+  transform: translateY(
+    -50%
+  ); /* Move the container up by 50% of its own height */
+  width: 300px;
+  margin: 0;
+  padding: 20px;
+  background-color: #cbe1ef; /* Calm background color */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  cursor: pointer;
+}
+
+textarea {
+  border: none;
+  background-color: transparent;
+  resize: none;
+  outline: none;
+}

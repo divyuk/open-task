@@ -1,0 +1,10 @@
+.taskItem {
+  padding: 20px;
+  margin: 30px;
+  border: 2px solid black;
+  background-color: #ffddd3;
+  font-family: "Delius", cursive;
+  font-size: 25px;
+  width: 300px;
+  border-radius: 10px;
+}

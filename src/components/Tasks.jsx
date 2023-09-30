@@ -2,25 +2,28 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "./Tasks.css";
 import { ToastContainer, toast } from "react-toastify";
+import Heading from "./Heading";
+import InputTask from "./InputTask";
+import TaskList from "./TaskList";
+import Description from "./Description";
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
-  const [showInput, setShowInput] = useState(false);
+  const [showDescription, setShowDescription] = useState(false);
   const [taskDetails, setTaskDetails] = useState({
     title: "",
     description: "",
     flag: "No",
     priority: "low",
   });
+  const [showInput, setShowInput] = useState(false);
 
-  const [showDescription, setShowDescription] = useState(false);
   const [selectedId, setSelectedId] = useState(0);
-
   const [isEditing, setIsEditing] = useState(false);
-  const [editedDescription, setEditedDescription] = useState("");
 
   const [taskDesc, setTaskDesc] = useState("");
 
+  // ! side effect to fetch the task once the component is mounted
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,11 +36,21 @@ function Tasks() {
     fetchData();
   }, []);
 
+  //! once the form is submitted the taskDetails body is thrown into the api and the old task array is
+  //! updated with the new one.
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/tasks", taskDetails);
-      setTasks([...tasks, taskDetails]);
+      const response = await axios.post(
+        "http://localhost:3000/tasks",
+        taskDetails
+      );
+
+      // Get the newly created task with its unique ID from the response
+      const newTask = response.data;
+
+      // Update the tasks state with the new task including the unique ID
+      setTasks([...tasks, newTask]);
     } catch (err) {
       toast.error("Title & description are required field");
       console.log("Something went wrong...", err);
@@ -52,126 +65,51 @@ function Tasks() {
     }
   };
 
-  function handleInputChange(e) {
-    const { name, value } = e.target;
-    // this will be like {name : title} then [name] will give title
-    setTaskDetails({ ...taskDetails, [name]: value });
-  }
   function openDescription(clickedId, desc) {
-    setSelectedId(clickedId);
+    setSelectedId(() => clickedId);
     setShowDescription(!showDescription);
-    setEditedDescription(desc);
+    setTaskDesc(desc);
   }
-
-  useEffect(() => {
-    const td = tasks.find((task) => task.id === selectedId)?.description;
-    setTaskDesc(td);
-  }, [selectedId, tasks]);
 
   function handleEdit() {
     setIsEditing(!isEditing);
-    setEditedDescription(taskDesc);
+    // const td = tasks.find((task) => task.id == selectedId).description;
+    // console.log("td: ", td);
+    // setEditedDescription(td);
   }
 
-  async function handleSave() {
-    // Steps to perform save
-    setIsEditing(!isEditing);
-    // 1. Take the new description and add it to tasks
-    const newTask = tasks.map((task) => {
-      if (task.id == selectedId) {
-        console.log("Inside", editedDescription);
-        return { ...task, description: editedDescription };
+  async function handleSave(newDesc, oldID) {
+    console.log(newDesc, oldID);
+
+    const updatedTasks = tasks.map((task) => {
+      if (task.id == oldID) {
+        console.log("in", task);
+        return { ...task, description: newDesc };
       } else return task;
     });
-    console.log(newTask);
-    setTasks(newTask);
-    // 2. Call the put method and pass the updated Body
-    try {
-      const id = selectedId;
-      const d = { description: editedDescription };
-      await axios.put(`http://localhost:3000/tasks/${id}`, d);
-    } catch (err) {
-      console.log("Something went wrong...", err);
-    }
+    console.log("Complete array", updatedTasks);
+    setTasks(updatedTasks);
+    setShowDescription(!showDescription);
   }
   return (
     <>
       <ToastContainer position="top-center" />
-      <h1 className="heading">Tasks</h1>
-      <div className="taskContainer">
-        {tasks.map((task) => (
-          <li
-            className="taskItem"
-            key={task.id}
-            onClick={() => openDescription(task.id, task.description)}
-          >
-            {task.title}
-          </li>
-        ))}
-        <button className="button" onClick={() => setShowInput(!showInput)}>
-          +
-        </button>
-      </div>
-      {/* Input for Task */}
-      {showInput && (
-        <form className="form-container" onSubmit={handleSubmit}>
-          <label htmlFor="title">Title : </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            onChange={handleInputChange}
-            value={taskDetails.title}
-          />
-
-          <label htmlFor="description">Description : </label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            onChange={handleInputChange}
-            value={taskDetails.description}
-          />
-          <label htmlFor="priority">Priority : </label>
-          <select
-            value={taskDetails.priority}
-            onChange={handleInputChange}
-            name="priority"
-            id="priority"
-          >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-          <button type="submit">Add It! </button>
-        </form>
-      )}
+      <Heading />
+      <InputTask
+        handleSubmit={handleSubmit}
+        taskDetails={taskDetails}
+        setTaskDetails={setTaskDetails}
+        showInput={showInput}
+        setShowInput={setShowInput}
+      />
+      <TaskList tasks={tasks} openDescription={openDescription} />
 
       {showDescription && (
-        <div className="description">
-          {isEditing ? (
-            <textarea
-              rows="10"
-              cols="35"
-              type="text"
-              className="desc-edit"
-              value={editedDescription}
-              onChange={(e) => setEditedDescription(e.target.value)}
-              placeholder={taskDesc}
-            />
-          ) : (
-            <p>{editedDescription}</p>
-          )}
-          {isEditing ? (
-            <span className="material-symbols-outlined" onClick={handleSave}>
-              save
-            </span>
-          ) : (
-            <span className="material-symbols-outlined" onClick={handleEdit}>
-              edit_note
-            </span>
-          )}
-        </div>
+        <Description
+          taskDesc={taskDesc}
+          handleSave={handleSave}
+          selectedId={selectedId}
+        />
       )}
     </>
   );
