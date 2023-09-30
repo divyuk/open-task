@@ -47,7 +47,7 @@ function Tasks() {
       );
 
       // Get the newly created task with its unique ID from the response
-      const newTask = response.data;
+      const newTask = { ...taskDetails, id: response.data };
 
       // Update the tasks state with the new task including the unique ID
       setTasks([...tasks, newTask]);
