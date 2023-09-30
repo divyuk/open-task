@@ -68,12 +68,32 @@ function Tasks() {
     setTaskDesc(td);
   }, [selectedId, tasks]);
 
-  console.log(taskDesc);
   function handleEdit() {
     setIsEditing(!isEditing);
     setEditedDescription(taskDesc);
   }
 
+  async function handleSave() {
+    // Steps to perform save
+    setIsEditing(!isEditing);
+    // 1. Take the new description and add it to tasks
+    const newTask = tasks.map((task) => {
+      if (task.id == selectedId) {
+        console.log("Inside", editedDescription);
+        return { ...task, description: editedDescription };
+      } else return task;
+    });
+    console.log(newTask);
+    setTasks(newTask);
+    // 2. Call the put method and pass the updated Body
+    try {
+      const id = selectedId;
+      const d = { description: editedDescription };
+      await axios.put(`http://localhost:3000/tasks/${id}`, d);
+    } catch (err) {
+      console.log("Something went wrong...", err);
+    }
+  }
   return (
     <>
       <ToastContainer position="top-center" />
@@ -142,9 +162,15 @@ function Tasks() {
           ) : (
             <p>{editedDescription}</p>
           )}
-          <span className="material-symbols-outlined" onClick={handleEdit}>
-            {isEditing ? "save" : "edit_note"}
-          </span>
+          {isEditing ? (
+            <span className="material-symbols-outlined" onClick={handleSave}>
+              save
+            </span>
+          ) : (
+            <span className="material-symbols-outlined" onClick={handleEdit}>
+              edit_note
+            </span>
+          )}
         </div>
       )}
     </>
