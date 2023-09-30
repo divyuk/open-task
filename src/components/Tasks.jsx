@@ -19,6 +19,8 @@ function Tasks() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState("");
 
+  const [taskDesc, setTaskDesc] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,11 +57,18 @@ function Tasks() {
     // this will be like {name : title} then [name] will give title
     setTaskDetails({ ...taskDetails, [name]: value });
   }
-  function openDescription(clickedId) {
+  function openDescription(clickedId, desc) {
     setSelectedId(clickedId);
     setShowDescription(!showDescription);
+    setEditedDescription(desc);
   }
-  const taskDesc = tasks.find((task) => task.id === selectedId)?.description;
+
+  useEffect(() => {
+    const td = tasks.find((task) => task.id === selectedId)?.description;
+    setTaskDesc(td);
+  }, [selectedId, tasks]);
+
+  console.log(taskDesc);
   function handleEdit() {
     setIsEditing(!isEditing);
     setEditedDescription(taskDesc);
@@ -74,7 +83,7 @@ function Tasks() {
           <li
             className="taskItem"
             key={task.id}
-            onClick={() => openDescription(task.id)}
+            onClick={() => openDescription(task.id, task.description)}
           >
             {task.title}
           </li>
@@ -131,7 +140,7 @@ function Tasks() {
               placeholder={taskDesc}
             />
           ) : (
-            <p>{taskDesc}</p>
+            <p>{editedDescription}</p>
           )}
           <span className="material-symbols-outlined" onClick={handleEdit}>
             {isEditing ? "save" : "edit_note"}
