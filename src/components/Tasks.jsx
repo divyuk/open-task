@@ -70,26 +70,23 @@ function Tasks() {
     setShowDescription(!showDescription);
     setTaskDesc(desc);
   }
-
-  function handleEdit() {
-    setIsEditing(!isEditing);
-    // const td = tasks.find((task) => task.id == selectedId).description;
-    // console.log("td: ", td);
-    // setEditedDescription(td);
-  }
-
   async function handleSave(newDesc, oldID) {
-    console.log(newDesc, oldID);
-
     const updatedTasks = tasks.map((task) => {
-      if (task.id == oldID) {
-        console.log("in", task);
-        return { ...task, description: newDesc };
-      } else return task;
+      if (task.id == oldID) return { ...task, description: newDesc };
+      else return task;
     });
-    console.log("Complete array", updatedTasks);
     setTasks(updatedTasks);
     setShowDescription(!showDescription);
+    // Call the put method and pass the updated Body
+    try {
+      const updatedDescription = { description: newDesc };
+      await axios.put(
+        `http://localhost:3000/tasks/${oldID}`,
+        updatedDescription
+      );
+    } catch (err) {
+      console.log("Something went wrong...", err);
+    }
   }
   return (
     <>
