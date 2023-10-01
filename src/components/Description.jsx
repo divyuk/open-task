@@ -19,24 +19,26 @@ function Description({
           value={editedDescription}
           onChange={(e) => setEditedDescription(e.target.value)}
         />
-        <span
-          className="material-symbols-outlined"
-          onClick={() => handleSave(editedDescription, selectedId)}
-        >
-          save
-        </span>
-        <span
-          class="material-symbols-outlined"
-          onClick={() => handleCompleted(selectedId)}
-        >
-          check_circle
-        </span>
-        <span
-          className="material-symbols-outlined delete"
-          onClick={() => handleDelete(selectedId)}
-        >
-          delete
-        </span>
+        <div className="container-buttons">
+          <span
+            className="material-symbols-outlined"
+            onClick={() => handleSave(editedDescription, selectedId)}
+          >
+            save
+          </span>
+          <span
+            class="material-symbols-outlined"
+            onClick={() => handleCompleted(selectedId)}
+          >
+            check_circle
+          </span>
+          <span
+            className="material-symbols-outlined"
+            onClick={() => handleDelete(selectedId)}
+          >
+            delete
+          </span>
+        </div>
       </div>
     </>
   );
