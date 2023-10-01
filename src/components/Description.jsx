@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./Description.css";
-function Description({ taskDesc, handleSave, selectedId }) {
+function Description({ taskDesc, handleSave, selectedId, handleDelete }) {
   const [editedDescription, setEditedDescription] = useState(taskDesc);
   return (
     <>
@@ -18,6 +18,13 @@ function Description({ taskDesc, handleSave, selectedId }) {
           onClick={() => handleSave(editedDescription, selectedId)}
         >
           save
+        </span>
+
+        <span
+          className="material-symbols-outlined delete"
+          onClick={() => handleDelete(selectedId)}
+        >
+          delete
         </span>
       </div>
     </>

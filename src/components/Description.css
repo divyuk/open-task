@@ -17,6 +17,10 @@
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
   cursor: pointer;
 }
+.delete {
+  position: fixed;
+  right: 4%;
+}
 
 textarea {
   border: none;

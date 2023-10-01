@@ -88,6 +88,17 @@ function Tasks() {
       console.log("Something went wrong...", err);
     }
   }
+
+  async function handleDelete(clickedId) {
+    setShowDescription(!showDescription);
+    const filteredTasks = tasks.filter((task) => task.id != clickedId);
+    setTasks(filteredTasks);
+    try {
+      await axios.delete(`http://localhost:3000/tasks/${clickedId}`);
+    } catch (err) {
+      console.log("Something went wrong..", err);
+    }
+  }
   return (
     <>
       <ToastContainer position="top-center" />
@@ -106,6 +117,7 @@ function Tasks() {
           taskDesc={taskDesc}
           handleSave={handleSave}
           selectedId={selectedId}
+          handleDelete={handleDelete}
         />
       )}
     </>
