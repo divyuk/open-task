@@ -1,6 +1,12 @@
 import { useState } from "react";
 import "./Description.css";
-function Description({ taskDesc, handleSave, selectedId, handleDelete }) {
+function Description({
+  taskDesc,
+  handleSave,
+  selectedId,
+  handleDelete,
+  handleCompleted,
+}) {
   const [editedDescription, setEditedDescription] = useState(taskDesc);
   return (
     <>
@@ -19,7 +25,12 @@ function Description({ taskDesc, handleSave, selectedId, handleDelete }) {
         >
           save
         </span>
-
+        <span
+          class="material-symbols-outlined"
+          onClick={() => handleCompleted(selectedId)}
+        >
+          check_circle
+        </span>
         <span
           className="material-symbols-outlined delete"
           onClick={() => handleDelete(selectedId)}

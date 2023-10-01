@@ -99,6 +99,22 @@ function Tasks() {
       console.log("Something went wrong..", err);
     }
   }
+
+  async function handleCompleted(clickedId) {
+    const updatedTasks = tasks.map((task) => {
+      if (task.id == clickedId) return { ...task, flag: "Yes" };
+      else return task;
+    });
+    setTasks(updatedTasks);
+    setShowDescription(!showDescription);
+    try {
+      const updatedFlag = { flag: "Yes" };
+      await axios.put(`http://localhost:3000/tasks/${clickedId}`, updatedFlag);
+    } catch (err) {
+      console.log("Something went wrong...", err);
+    }
+  }
+
   return (
     <>
       <ToastContainer position="top-center" />
@@ -118,6 +134,7 @@ function Tasks() {
           handleSave={handleSave}
           selectedId={selectedId}
           handleDelete={handleDelete}
+          handleCompleted={handleCompleted}
         />
       )}
     </>
